@@ -1,0 +1,22 @@
+services:
+  db:
+    image: mysql:8
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=gxpdb
+    ports:
+      - "3306:3306"
+  backend:
+    build: ./backend
+    depends_on: [db]
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/gxpdb?useSSL=false&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+    ports:
+      - "8080:8080"
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:80"
+    depends_on: [backend]
